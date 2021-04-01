@@ -11,14 +11,15 @@ const Article = ({panier}) => {
 
 
                     {panier.map((p)=>{
+                        console.log(panier)
                     return(
                         <li class="col-span-1 flex shadow-sm rounded-md">
                             <div class="flex-shrink-0 flex items-center justify-center w-16 bg-green-400 text-white text-sm leading-5 font-medium rounded-l-md">
-                                {p.id}
+                                {p.shopID}
                             </div>
                             <div class="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
                                 <div class="flex-1 px-4 py-2 text-sm leading-5 truncate">
-                                <a href="#" class="text-gray-900 font-medium hover:text-gray-600 transition ease-in-out duration-150">Test</a>
+                                <a href="#" class="text-gray-900 font-medium hover:text-gray-600 transition ease-in-out duration-150">{panier.name}</a>
                                 
                                 </div>
                                 <div class="flex-shrink-0 pr-2">

@@ -7,10 +7,11 @@ export const withPanier = (WrappedComponent) =>{
         console.log("Gestion du panier")
 
         const [panier,setPanier] = useState([])
-        const [lastID,setLastID] = useState(0)
+        const [lastID,setLastID] = useState(1)
 
         const ajouterArticle = (obj) =>{
-            setPanier([...panier,{id:lastID}])
+            obj.shopID = lastID
+            setPanier([...panier,obj])
             setLastID(lastID + 1)
         }
 
