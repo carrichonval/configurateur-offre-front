@@ -1,19 +1,25 @@
 import React, {useState,useEffect} from 'react';
+import Article from './Article';
 
-import {withRouter} from "react-router-dom";
+import Panier from './Panier';
+import { withPanier } from './PanierContext';
+
+const Home = (props) => {
+
+    console.log(props)
+
+    const [page,setpage] = useState('/')
+    const [articles,setArticles] = useState([])
+    const [selectedArticles,setSelectedArticle] = useState(null)
+
+    useEffect(()=>{
+        fetchArticles()
+    },[])
 
 
-export default withRouter((props)=>{
+    const fetchArticles = ()=>{
 
-    console.log(props.history)
-    const [datas,setDatas] = useState(null)
-    
-    useEffect(() => {
-        fetchDatas()
-    }, []);
-
-    const fetchDatas = ()=>{
-        fetch(process.env.REACT_APP_API_URL+'/datas', {
+        fetch(process.env.REACT_APP_API_URL+'/products', {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
@@ -27,230 +33,90 @@ export default withRouter((props)=>{
         })
         .then((json) => {
             console.log(json)
-            setDatas(json)
+            setArticles(json)
         })
         .catch((error) => {
             console.log(error)
         });
+
     }
-    if(datas != null){
+
+    console.log(selectedArticles)
+
         return (
             <>
+                <nav id="navbar" className="bg-white border-b border-gray-200 z-50 mb-4 sticky top-0 ">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="flex justify-between h-16">
+                            <div className="flex">
+                                <div className="sm:-my-px sm:ml-6 flex">
+                                    <div onClick={()=>setpage("/")}  className={(page === "/" ? "border-primary " : "border-transparent ") + " cursor-pointer mr-4 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium leading-5 text-gray-500 focus:outline-none hover:border-fourth transition duration-150 ease-in-out"}>
+                                        Accueil
+                                    </div>
+                                    <div onClick={()=>setpage("/panier")} className={(page === "/panier" ? "border-primary " : "border-transparent ") + " cursor-pointer mr-4 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium leading-5 text-gray-500 focus:outline-none hover:border-fourth transition duration-150 ease-in-out"}>
+                                        Panier ({props.panier.length})
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+
                 <div className="mt-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="my-2">
-                        <h2 className="text-gray-500 text-xs font-medium uppercase tracking-wide">A -</h2>
-                        <ul className="mt-3 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 xl:grid-cols-4">
-                            <li onClick={()=>props.history.push("/animals")} className="col-span-1 cursor-pointer flex shadow-sm rounded-md">
-                                <div className="flex-shrink-0 flex items-center justify-center w-16 bg-pink-600 text-white text-sm leading-5 font-medium rounded-l-md">
-                                    A
-                                </div>
-                                <div className="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
-                                    <div className="flex-1 px-4 py-2 text-sm leading-5 truncate">
-                                        <div className="text-gray-900 font-medium hover:text-gray-600 transition ease-in-out duration-150">Animals</div>
-                                        <p className="text-gray-500">{datas.animals} animals</p>
-                                    </div>
-                                    
-                                </div>
-                            </li>
-                            <li  onClick={()=>props.history.push("/animes")} className="col-span-1 cursor-pointer flex shadow-sm rounded-md">
-                                <div className="flex-shrink-0 flex items-center justify-center w-16 bg-pink-600 text-white text-sm leading-5 font-medium rounded-l-md">
-                                    A
-                                </div>
-                                <div className="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
-                                    <div className="flex-1 px-4 py-2 text-sm leading-5 truncate">
-                                        <div className="text-gray-900 font-medium hover:text-gray-600 transition ease-in-out duration-150">Animes</div>
-                                        <p className="text-gray-500">{datas.animes} animes</p>
-                                    </div>
-                                    
-                                </div>
-                            </li>
-                            <li  onClick={()=>props.history.push("/astrologicalSigns")} className="col-span-1 cursor-pointer flex shadow-sm rounded-md">
-                                <div className="flex-shrink-0 flex items-center justify-center w-16 bg-pink-600 text-white text-sm leading-5 font-medium rounded-l-md">
-                                    A
-                                </div>
-                                <div className="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
-                                    <div className="flex-1 px-4 py-2 text-sm leading-5 truncate">
-                                        <div className="text-gray-900 font-medium hover:text-gray-600 transition ease-in-out duration-150">Astrological signs</div>
-                                        <p className="text-gray-500">{datas.astrologicalSigns} astrological signs</p>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-    
-                    <div className="my-2">
-                        <h2 className="text-gray-500 text-xs font-medium uppercase tracking-wide">C -</h2>
-                        <ul className="mt-3 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 xl:grid-cols-4">
-                            <li onClick={()=>props.history.push("/cars")} className="col-span-1 cursor-pointer flex shadow-sm rounded-md">
-                                <div className="flex-shrink-0 flex items-center justify-center w-16 bg-orange-600 text-white text-sm leading-5 font-medium rounded-l-md">
-                                    C
-                                </div>
-                                <div className="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
-                                    <div className="flex-1 px-4 py-2 text-sm leading-5 truncate">
-                                        <div className="text-gray-900 font-medium hover:text-gray-600 transition ease-in-out duration-150">Cars</div>
-                                        <p className="text-gray-500">{datas.cars} cars</p>
-                                    </div>
-                                </div>
-                            </li>
-                            <li  onClick={()=>props.history.push("/cities")} className="col-span-1 cursor-pointer flex shadow-sm rounded-md">
-                                <div className="flex-shrink-0 flex items-center justify-center w-16 bg-orange-600 text-white text-sm leading-5 font-medium rounded-l-md">
-                                    C
-                                </div>
-                                <div className="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
-                                    <div className="flex-1 px-4 py-2 text-sm leading-5 truncate">
-                                        <div className="text-gray-900 font-medium hover:text-gray-600 transition ease-in-out duration-150">Cities</div>
-                                        <p className="text-gray-500">{datas.cities} cities</p>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-    
-                    <div className="my-2">
-                        <h2 className="text-gray-500 text-xs font-medium uppercase tracking-wide">D -</h2>
-                        <ul className="mt-3 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 xl:grid-cols-4">
-                            <li  onClick={()=>props.history.push("/destinations")} className="col-span-1 cursor-pointer flex shadow-sm rounded-md">
-                                <div className="flex-shrink-0 flex items-center justify-center w-16 bg-purple-600 text-white text-sm leading-5 font-medium rounded-l-md">
-                                    D
-                                </div>
-                                <div className="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
-                                    <div className="flex-1 px-4 py-2 text-sm leading-5 truncate">
-                                        <div className="text-gray-900 font-medium hover:text-gray-600 transition ease-in-out duration-150">Destinations</div>
-                                        <p className="text-gray-500">{datas.destinations} destinations</p>
-                                    </div>
-                                </div>
-                            </li>
-                            <li onClick={()=>props.history.push("/drinks")} className="col-span-1 cursor-pointer flex shadow-sm rounded-md">
-                                <div className="flex-shrink-0 flex items-center justify-center w-16 bg-purple-600 text-white text-sm leading-5 font-medium rounded-l-md">
-                                    D
-                                </div>
-                                <div className="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
-                                    <div className="flex-1 px-4 py-2 text-sm leading-5 truncate">
-                                        <div className="text-gray-900 font-medium hover:text-gray-600 transition ease-in-out duration-150">Drinks</div>
-                                        <p className="text-gray-500">{datas.drinks} drinks</p>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-    
-                    <div className="my-2">
-                        <h2 className="text-gray-500 text-xs font-medium uppercase tracking-wide">F -</h2>
-                        <ul className="mt-3 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 xl:grid-cols-4">
-                            <li onClick={()=>props.history.push("/foods")} className="col-span-1 cursor-pointer flex shadow-sm rounded-md">
-                                <div className="flex-shrink-0 flex items-center justify-center w-16 bg-red-600 text-white text-sm leading-5 font-medium rounded-l-md">
-                                    F
-                                </div>
-                                <div className="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
-                                    <div className="flex-1 px-4 py-2 text-sm leading-5 truncate">
-                                        <div className="text-gray-900 font-medium hover:text-gray-600 transition ease-in-out duration-150">Foods</div>
-                                        <p className="text-gray-500">{datas.foods} foods</p>
-                                    </div>
-                                </div>
-                            </li>
-                            <li onClick={()=>props.history.push("/filmTypes")} className="col-span-1 cursor-pointer flex shadow-sm rounded-md">
-                                <div className="flex-shrink-0 flex items-center justify-center w-16 bg-red-600 text-white text-sm leading-5 font-medium rounded-l-md">
-                                    F
-                                </div>
-                                <div className="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
-                                    <div className="flex-1 px-4 py-2 text-sm leading-5 truncate">
-                                        <div className="text-gray-900 font-medium hover:text-gray-600 transition ease-in-out duration-150">Film types</div>
-                                        <p className="text-gray-500">{datas.filmTypes} film types</p>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-    
-                    <div className="my-2">
-                        <h2 className="text-gray-500 text-xs font-medium uppercase tracking-wide">M -</h2>
-                        <ul className="mt-3 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 xl:grid-cols-4">
-                            <li onClick={()=>props.history.push("/musicTypes")} className="col-span-1 cursor-pointer flex shadow-sm rounded-md">
-                                <div className="flex-shrink-0 flex items-center justify-center w-16 bg-green-600 text-white text-sm leading-5 font-medium rounded-l-md">
-                                    M
-                                </div>
-                                <div className="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
-                                    <div className="flex-1 px-4 py-2 text-sm leading-5 truncate">
-                                        <div className="text-gray-900 font-medium hover:text-gray-600 transition ease-in-out duration-150">Music types</div>
-                                        <p className="text-gray-500">{datas.musicTypes} music types</p>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-    
-                    <div className="my-2">
-                        <h2 className="text-gray-500 text-xs font-medium uppercase tracking-wide">R -</h2>
-                        <ul className="mt-3 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 xl:grid-cols-4">
-                            <li onClick={()=>props.history.push("/regions")} className="col-span-1 cursor-pointer flex shadow-sm rounded-md">
-                                <div className="flex-shrink-0 flex items-center justify-center w-16 bg-blue-600 text-white text-sm leading-5 font-medium rounded-l-md">
-                                    R
-                                </div>
-                                <div className="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
-                                    <div className="flex-1 px-4 py-2 text-sm leading-5 truncate">
-                                        <div className="text-gray-900 font-medium hover:text-gray-600 transition ease-in-out duration-150">Regions</div>
-                                        <p className="text-gray-500">{datas.regions} regions</p>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-    
-                    <div className="my-2">
-                        <h2 className="text-gray-500 text-xs font-medium uppercase tracking-wide">S -</h2>
-                        <ul className="mt-3 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 xl:grid-cols-4">
-                            <li onClick={()=>props.history.push("/sports")} className="col-span-1 cursor-pointer flex shadow-sm rounded-md">
-                                <div className="flex-shrink-0 flex items-center justify-center w-16 bg-gray-600 text-white text-sm leading-5 font-medium rounded-l-md">
-                                    S
-                                </div>
-                                <div className="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
-                                    <div className="flex-1 px-4 py-2 text-sm leading-5 truncate">
-                                        <div className="text-gray-900 font-medium hover:text-gray-600 transition ease-in-out duration-150">Sports</div>
-                                        <p className="text-gray-500">{datas.sports} sports</p>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-    
-                    <div className="my-2">
-                        <h2 className="text-gray-500 text-xs font-medium uppercase tracking-wide">U -</h2>
-                        <ul className="mt-3 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 xl:grid-cols-4">
-                            <li onClick={()=>props.history.push("/users")} className="col-span-1 cursor-pointer flex shadow-sm rounded-md">
-                                <div className="flex-shrink-0 flex items-center justify-center w-16 bg-yellow-600 text-white text-sm leading-5 font-medium rounded-l-md">
-                                    U
-                                </div>
-                                <div className="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
-                                    <div className="flex-1 px-4 py-2 text-sm leading-5 truncate">
-                                        <div className="text-gray-900 font-medium hover:text-gray-600 transition ease-in-out duration-150">Users</div>
-                                        <p className="text-gray-500">{datas.users} users</p>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-    
-                    <div className="my-2">
-                        <h2 className="text-gray-500 text-xs font-medium uppercase tracking-wide">V -</h2>
-                        <ul className="mt-3 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 xl:grid-cols-4">
-                            <li onClick={()=>props.history.push("/videoGames")} className="col-span-1 cursor-pointer flex shadow-sm rounded-md">
-                                <div className="flex-shrink-0 flex items-center justify-center w-16 bg-indigo-600 text-white text-sm leading-5 font-medium rounded-l-md">
-                                    V
-                                </div>
-                                <div className="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
-                                    <div className="flex-1 px-4 py-2 text-sm leading-5 truncate">
-                                        <div className="text-gray-900 font-medium hover:text-gray-600 transition ease-in-out duration-150">Vidéos games</div>
-                                        <p className="text-gray-500">{datas.videoGames} video games</p>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                    Liste des articles
                 </div>
+
+                <div className="mt-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                  
+                    <ul class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                        {articles.map((article)=>{
+                            return(
+                                                            
+                                <li onClick={()=>setSelectedArticle(article)} class="col-span-1 bg-white rounded-lg hover:shadow-md cursor-pointer">
+                                    <div class="w-full flex items-center justify-between p-6 space-x-6">
+                                        <div class="flex-1 truncate">
+                                            <div class="flex items-center space-x-3">
+                                            <h3 class="text-gray-900 text-sm leading-5 font-medium truncate">{article.name}</h3>
+                                            </div>
+                                            <p class="mt-1 text-gray-500 text-sm leading-5 truncate">{article.description}</p>
+                                        </div>
+                                    </div>
+                                    <div class="border-t border-gray-200">
+                                        <div class="-mt-px flex">
+                                            <div class="w-0 flex-1 flex border-r border-gray-200">
+                                                <div class="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm leading-5 text-gray-700 font-medium border border-transparent rounded-bl-lg focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 transition ease-in-out duration-150">
+                                                <svg class="h-5 w-5 text-gray-400"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                </svg>
+                                                <span class="ml-3">{article.price}</span>
+                                            </div>
+                                            </div>
+                                            <div class="-ml-px w-0 flex-1 flex">
+                                            <div  class="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm leading-5 text-gray-700 font-medium border border-transparent rounded-br-lg focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 transition ease-in-out duration-150">
+                                                <span class="ml-3">{article.options.length} option{article.options.length >1 && "s"} disponible</span>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            )
+                        })}
+                    </ul>
+                </div>
+
+
+                <div onClick={()=>props.ajouterArticle()} className="cursor-pointer mt-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    Ajouter un article au panier
+                </div>
+                
+
+                {page == '/panier' ? <Panier panier = {props} /> : null}
+               
             </>
         )
-    }else{
-        return null
-    }
     
-})
+    
+}
+
+export default withPanier(Home)
