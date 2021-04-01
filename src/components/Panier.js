@@ -5,6 +5,8 @@ import lodash from 'lodash'
 const Panier = ({panier}) => {
     console.log(panier)
 
+    const [validePanier,setValidePanier] = useState(false)
+
     const calculTotal = (article) => {
         let total = 0
         total += parseInt(article.price)
@@ -16,14 +18,114 @@ const Panier = ({panier}) => {
         return total
     }
 
+
+    const validerPanier = async (panier) => {
+        console.log(panier)
+        let shopID = await fetchShoppingId();
+        shopID = shopID.id
+        console.log("ID",shopID)
+
+        for await (const article of panier) {
+            let total = 0
+            for(const option of article.options){
+               if(option.selected){
+                   total++
+               }
+            }
+            if(total == 0){
+                let tps = await fetchAddArticle(shopID,article.id,0)
+            }else{
+                for(const option of article.options){
+                    if(option.selected){
+                        let res = await fetchAddArticle(shopID,article.id,option.id)
+                    }
+                 }
+            }
+        }
+        setValidePanier(true)
+    }
+
+    const fetchShoppingId = () =>{
+        const response = fetch(process.env.REACT_APP_API_URL+'/shoppingcards', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+            return response.json();
+        })
+        .then((json) => {
+            return json
+        })
+        .catch((error) => {
+            console.log(error)
+        });
+
+        return response
+    }
+
+    const fetchAddArticle = (shopID,articleID,optionID) =>{
+        const response = fetch(process.env.REACT_APP_API_URL+'/orders', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                'shoppingcardId':shopID,
+                'productId':articleID,
+                'optionId':optionID,
+            })
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+            return response.json();
+        })
+        .then((json) => {
+            return json
+        })
+        .catch((error) => {
+            console.log(error)
+        });
+
+        return response
+    }
+
+
         return (
             <>
                 <div  className="cursor-pointer mt-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    
+                    <button onClick={()=>validerPanier(panier.panier)} type="button" className="inline-flex justify-center rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                       Valider le panier
+                    </button>
+                </div>
+                <div  className="cursor-pointer mt-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <button onClick={()=>panier.viderPanier()} type="button" className="inline-flex justify-center rounded-md border border-transparent px-4 py-2 bg-red-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5">
                         Vider le panier
                     </button>
                 </div>
+                {validePanier ? 
+                
+                    <div className="bg-green-200 border-l-4 w-1/2 border-green-500 p-4 mb-2 mx-4 mt-4 rounded-md">
+                    <div className="flex">
+                        <div className="flex-shrink-0">
+                            <svg className="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                            </svg>
+                        </div>
+                        <div className="ml-3">
+                            <p className="text-sm leading-5 text-green-800">
+                                {"La commande à bien été passé"}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                :null}
                 <div className="mt-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 class="text-gray-500 text-xs font-medium uppercase tracking-wide">Panier</h2>
                     <ul class="mt-3 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4">
