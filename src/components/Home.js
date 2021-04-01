@@ -38,7 +38,10 @@ const Home = (props) => {
         .catch((error) => {
             console.log(error)
         });
+    }
 
+    const closeModal = ()=> {
+        setSelectedArticle(null)
     }
 
     console.log(selectedArticles)
@@ -66,6 +69,93 @@ const Home = (props) => {
                 <div className="mt-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     Liste des articles
                 </div>
+
+                {selectedArticles != null ? 
+                    <div className="fixed z-10 inset-0 overflow-y-auto">
+                        <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                            <div className="fixed inset-0 transition-opacity">
+                                <div onClick={closeModal} className="absolute inset-0 bg-gray-500 opacity-50"></div>
+                            </div>
+                            <span className="hidden sm:inline-block sm:align-middle sm:h-screen"></span>&#8203;
+                            <div className="w-2/3 inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:p-6">
+                                <div className="grid grid-cols-1 gap-4 mb-4">
+                                    <div>
+                                    
+<div class="bg-white shadow overflow-hidden sm:rounded-lg">
+  <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
+    <h3 class="text-lg leading-6 font-medium text-gray-900">
+      {selectedArticles.name}
+    </h3>
+    <p class="mt-1 max-w-2xl text-sm leading-5 text-gray-500">
+      {selectedArticles.description}
+    </p>
+  </div>
+  <div class="px-4 py-5 sm:p-0">
+    <dl>
+      <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+        <dt class="text-sm leading-5 font-medium text-gray-500">
+          Prix
+        </dt>
+        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+          {selectedArticles.price} €
+        </dd>
+      </div>
+      
+      <div class="mt-8 sm:mt-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:border-t sm:border-gray-200 sm:px-6 sm:py-5">
+        <dt class="text-sm leading-5 font-medium text-gray-500">
+          Options
+        </dt>
+        <dd class="mt-1 text-sm leading-5 text-gray-900 sm:mt-0 sm:col-span-2">
+          <ul class="border border-gray-200 rounded-md">
+           {selectedArticles.options.map((option)=>{
+               return (
+                <li class="pl-3 pr-4 py-3 flex items-center justify-between text-sm leading-5">
+                    <div class="w-0 flex-1 flex items-center">
+                        <span class="ml-2 flex-1 w-0 truncate">
+                            {option.name} - {option.price} €
+                        </span>
+                    </div>
+                    <div class="ml-4 flex-shrink-0">
+                        <input type="checkbox" />
+                    </div>
+              </li>
+               )
+           })}
+          </ul>
+        </dd>
+      </div>
+    </dl>
+  </div>
+</div>
+
+                                    </div>
+                                    
+                                </div>
+
+                               
+
+                                <div className="grid grid-cols-2 gap-4 mt-4">
+                                    
+                                    <div className="flex flex-row "> 
+                                        <span className="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
+                                            <button  type="button" className="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-blue-500 focus:outline-none focus:border-blue-700 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                                                Ajouter au panier
+                                            </button>
+                                        </span>
+                                        
+                                    </div>
+                                </div>
+                                <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+                                    <span className="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
+                                        <button onClick={closeModal} type="button" className="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-red-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                                            Fermer
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                :null}
 
                 <div className="mt-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                   

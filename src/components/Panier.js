@@ -11,7 +11,7 @@ const Panier = ({panier}) => {
                 </div>
 
                 <div className="mt-4 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="text-gray-500 text-xs font-medium uppercase tracking-wide">Pannier</h2>
+                <h2 class="text-gray-500 text-xs font-medium uppercase tracking-wide">Panier</h2>
                     <ul class="mt-3 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4">
 
 
