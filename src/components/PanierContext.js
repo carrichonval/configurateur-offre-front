@@ -17,7 +17,7 @@ export const withPanier = (WrappedComponent) =>{
 
         const viderPanier = () =>{
             setPanier([])
-            setLastID(0)
+            setLastID(1)
         }
 
         const supprimerArticle = (id) =>{
